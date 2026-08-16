@@ -6,7 +6,7 @@ import { leerExcel } from '../utils/excelReader';
 // Leemos los datos desde el archivo Excel
 const datosRegistro = leerExcel('datos_bonbonite.xlsx', 'Registro')[0];
 const datosLogin = leerExcel('datos_bonbonite.xlsx', 'Login')[0];
-const datosZapatos = leerExcel('datos_bonbonite.xlsx', 'Zapatos')[0];
+const datosProducto = leerExcel('datos_bonbonite.xlsx', 'Producto')[0];
 
 test.describe('Suite de Pruebas Secuenciales: Bon-Bonite', () => {
 
@@ -26,7 +26,7 @@ test.describe('Suite de Pruebas Secuenciales: Bon-Bonite', () => {
 
         // --- CASO 3: Comprar Zapatos ---
         console.log('Iniciando Caso 3: Búsqueda de Zapatos...');
-        await storePage.irAComprarZapatos(datosZapatos);
+        await storePage.irAComprarZapatos(datosProducto);
 
         console.log('¡Todos los casos se ejecutaron secuencialmente sin cerrar el navegador!');
     });

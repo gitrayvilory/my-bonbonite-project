@@ -19,19 +19,30 @@ export class AuthPage {
     // Navegar a la página de Mi Cuenta
     async irAMiCuenta() {
         await this.page.goto('https://www.bon-bonite.com/mi-cuenta/');
+
+            // Validar cookiescript de forma segura
+    const cookiescript = this.page.locator('id=cookiescript_accept');
+
+        // Comprobamos si el botón de cookies está presente y visible antes de hacer clic
+        if (await cookiescript.isVisible()) {
+            await cookiescript.click();
+            console.log("Banner de cookies aceptado exitosamente.");
+        } else {
+            console.log("El banner de cookies no está presente en esta vista.");
+        }
     }
 
     // Caso 1: Proceso de Registro
     async registrarCliente(datosRegistro: any) {
-        // 1. Validar Localizador label: Regístrate
+        // Validar Localizador label: Regístrate
         const labelRegistrate = this.page.locator('text=Regístrate').first();
         await expect(labelRegistrate).toBeVisible();
 
-        // 2. Localizador que inicia el registro
+        // Localizador que inicia el registro
         const botonRegistro = this.page.locator('id=show_register');
         await botonRegistro.click();
 
-        // 3. Llenar el formulario con los datos del Excel (con validaciones)
+        // Llenar el formulario con los datos del Excel (con validaciones)
         await this.llenarCampoSiValido('id=reg_username', datosRegistro.cedula);
         await this.llenarCampoSiValido('[id="first_name"]', datosRegistro.first_name); 
         await this.llenarCampoSiValido('[id="last_name"]', datosRegistro.last_name);
@@ -39,34 +50,34 @@ export class AuthPage {
         await this.llenarCampoSiValido('id=reg_password', datosRegistro.reg_password);
         await this.llenarCampoSiValido('id=reg_password2', datosRegistro.reg_password2);
         
-        // 4. Localizador que autoriza la política de privacidad
+        // Localizador que autoriza la política de privacidad
         const botonAutorizo = this.page.locator('id=privacy_policy_reg');
         await botonAutorizo.click()
-        // 5. Localizador que confirma el registro
+        // Localizador que confirma el registro
         const botonRegistrarme = this.page.locator('id=form-register');
         await botonRegistrarme.click();
 
         await this.page.waitForTimeout(5000);
-        // 6. Capturar evidencia tras finalizar el proceso
+        // Capturar evidencia tras finalizar el proceso
         await this.page.screenshot({ path: 'evidencias/1_registro_exitoso.png', fullPage: true });
     }
 
     // Caso 2: Proceso de Inicio de Sesión
     async iniciarSesion(datosLogin: any) {
-        // 1. Validar Localizador label: Inicia sesión
+        // Validar Localizador label: Inicia sesión
         const labelIniciaSesion = this.page.locator('text=Inicia sesión').first();
         await expect(labelIniciaSesion).toBeVisible();
 
-        // 2. Llenar el formulario con los datos del Excel (con validaciones)
+        // Llenar el formulario con los datos del Excel (con validaciones)
         await this.llenarCampoSiValido('id=username', datosLogin.cedula);
         await this.llenarCampoSiValido('id=password', datosLogin.password);
 
-        // 3. Localizador que inicia la sesión
+        // Localizador que inicia la sesión
         //const botonIniciaSesion = this.page.getByRole('button', { name: 'login' });
         const botonIniciaSesion = this.page.locator('button[name="login"]');
         await botonIniciaSesion.click();
 
-        // 4. Capturar evidencia tras finalizar el proceso
+        // Capturar evidencia tras finalizar el proceso
         await this.page.screenshot({ path: 'evidencias/2_login_exitoso.png', fullPage: true });
     }
 }
